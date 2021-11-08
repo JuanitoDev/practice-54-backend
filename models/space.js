@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       space.belongsTo(models.user);
-      user.hasOne(models.space);
+      space.hasMany(models.story);
     }
   }
   space.init(
