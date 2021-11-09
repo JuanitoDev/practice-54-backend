@@ -7,7 +7,8 @@ module.exports = {
       [
         {
           title: "John Doe's Space",
-          description: "Welcome to my Space 🪐 hope you will like my stories",
+          description:
+            "Welcome to my Space, I hope you will like my stories. Normally I share writes about Fashion, Food and Lifestyle.",
           backgroundColor: "#F4F1DE",
           color: "#3D405B",
           createdAt: new Date(),

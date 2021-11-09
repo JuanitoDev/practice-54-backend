@@ -1,6 +1,6 @@
 {
   "development": {
-    "url": "postgres://eguglxou:Yw6opm98H9CdAPdBDe1nh5dcFUQfAPWq@arjuna.db.elephantsql.com/eguglxou",
+    "url": "postgres://iarinnpf:A68gbhtkhyFCjmW-dnpvNbk1DsIXvOwp@surus.db.elephantsql.com/iarinnpf",
     "dialect": "postgres",
     "operatorsAliases": "0"
   },
