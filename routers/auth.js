@@ -5,6 +5,7 @@ const authMiddleware = require("../auth/middleware");
 const User = require("../models/").user;
 const Space = require("../models/").space;
 const { SALT_ROUNDS } = require("../config/constants");
+const Story = require("../models/").story;
 
 const router = new Router();
 
@@ -18,7 +19,10 @@ router.post("/login", async (req, res, next) => {
         .send({ message: "Please provide both email and password" });
     }
 
-    const user = await User.findOne({ where: { email } });
+    const user = await User.findOne({
+      where: { email },
+      include: [{ model: Space, include: { model: Story } }],
+    });
 
     if (!user || !bcrypt.compareSync(password, user.password)) {
       return res.status(400).send({
@@ -61,13 +65,11 @@ router.post("/signup", async (req, res) => {
 
     const token = toJWT({ userId: newUser.id });
 
-    res
-      .status(201)
-      .json({
-        token,
-        ...newUser.dataValues,
-        space: { ...newSpace.dataValues },
-      });
+    res.status(201).json({
+      token,
+      ...newUser.dataValues,
+      space: { ...newSpace.dataValues },
+    });
   } catch (error) {
     if (error.name === "SequelizeUniqueConstraintError") {
       return res
@@ -83,9 +85,16 @@ router.post("/signup", async (req, res) => {
 // - get the users email & name using only their token
 // - checking if a token is (still) valid
 router.get("/me", authMiddleware, async (req, res) => {
+  const space = await Space.findOne({
+    where: { userId: req.user.id },
+    include: [{ model: Story }],
+  });
   // don't send back the password hash
   delete req.user.dataValues["password"];
-  res.status(200).send({ ...req.user.dataValues });
+  res.status(200).send({
+    ...req.user.dataValues,
+    space,
+  });
 });
 
 module.exports = router;
